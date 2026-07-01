@@ -1,84 +1,73 @@
-# Yandex Wordstat MVP v0.6
+# WB GPT MVP 工具仓库
 
-俄罗斯 Yandex Wordstat 本地采集与选品特征分析工具。
+这个仓库用于集中管理和归档我与 ChatGPT 一起生成的 WB / 俄罗斯电商相关 MVP 工具。
 
-## 功能
+仓库目标：
 
-- 输入俄语产品类目词或生活场景词。
-- 调用 Yandex Search API / Wordstat API。
-- 采集热门查询、相似查询、趋势、地区分布。
-- 输出单个 Excel 文件。
-- 自动识别产品特征候选：颜色、材质、尺寸、风格、人群、场景、功能、价格/购买意图。
-- 自动生成下一轮扩展种子词。
+- 一个仓库管理多个工具；
+- 每个工具保留多个版本；
+- 每个版本都有说明、变更记录和测试记录；
+- 方便以后把新工具、新版本、使用说明继续放进来。
 
-## 适用场景
+## 当前工具索引
 
-这个工具适合用来发现俄罗斯用户在 Yandex 上主动搜索某类产品时常带的属性词，例如：
+| 工具 | 当前版本 | 用途 | 路径 |
+|---|---:|---|---|
+| WB 选品分析工具 | v0.5.1 | 分析 WB 搜索请求表，生成类目词簇、属性表现、品牌维度、下单/搜索对比和选品报告 | `tools/wb-selection-mvp/` |
+| Yandex Wordstat MVP | v0.6 | 分析 Yandex Wordstat 关键词、特征词、生活场景和扩展种子词 | 根目录旧版文件，后续可迁移到 `tools/yandex-wordstat-mvp/` |
 
-- `сумка`：包类的颜色、材质、款式、使用场景。
-- `рюкзак`：背包的人群、学校/旅行场景、容量/功能词。
-- `чехол для телефона`：手机壳的型号、颜色、材质、风格。
-- `автомобильный пылесос`：车载吸尘器的功能、功率、车用场景、购买意图。
+## 推荐目录结构
 
-## 重要限制
-
-Wordstat 不是销量数据，也不是客户评价数据。它只能证明“俄罗斯用户在 Yandex 上主动搜索了哪些词”。
-
-因此，工具输出的是“搜索需求线索 / 产品特征候选”，不能直接等同于“必定好卖”。最终选品仍建议结合 WB / Ozon 的销量、价格、评价、广告、物流成本一起判断。
-
-## 使用流程
-
-1. Windows 双击 `run_windows.bat`，或命令行运行：
-
-```bash
-python yandex_wordstat_mvp.py
+```text
+wb-gpt-mvp/
+├─ README.md
+├─ docs/
+│  └─ repository-guide.md
+├─ tools/
+│  ├─ wb-selection-mvp/
+│  │  ├─ README.md
+│  │  ├─ CHANGELOG.md
+│  │  ├─ latest.json
+│  │  └─ versions/
+│  │     └─ v0.5.1/
+│  │        ├─ README.md
+│  │        └─ RELEASE_NOTES.md
+│  └─ yandex-wordstat-mvp/
+│     └─ README.md
+└─ .gitignore
 ```
 
-2. API Key 填 `AQ...` 开头的 secret key，不要填 `aj...` 开头的 Key ID。
-3. 填入 Yandex Cloud `folderId`。
-4. 先点击权限自检。
-5. 自检通过后输入种子词开始采集。
+## 版本管理规则
 
-## 推荐设置
+每个工具建议使用：
 
-第一次测试建议：
+```text
+tools/<tool-name>/versions/v<major>.<minor>.<patch>/
+```
 
-- 关键词数量：5–10 个。
-- 返回词数：20 或 50。
-- 请求间隔：1.5–2 秒。
-- 第一轮只跑 TopRequests，第二轮再跑 Dynamics / Regions。
+例如：
 
-这样更不容易触发 Yandex 429 限流。
+```text
+tools/wb-selection-mvp/versions/v0.5.1/
+```
 
-## Excel Sheet 说明
+每个版本至少保留：
 
-- `README_汇总`：运行配置和行数汇总。
-- `FeatureAnalysis`：自动汇总的产品特征候选，包含证据查询词。
-- `Queries_Classified`：每条查询被识别出的特征标签。
-- `NextSeeds`：建议用于第二轮扩展的种子词。
-- `SeedBank`：不同类型种子词的用途和预期。
-- `TopQueries`：Yandex 返回的热门查询原始数据。
-- `Associations`：Yandex 返回的相似查询 / 用户还搜了什么。
-- `Dynamics`：趋势变化。
-- `Regions`：地区分布。
-- `Errors`：错误记录。
-- `Settings`：本次运行设置。
+- `README.md`：版本使用说明；
+- `RELEASE_NOTES.md`：本版本变化；
+- `QA_TEST_REPORT.md`：已测试内容；
+- 如通过本地方式上传完整工具包，可放置对应 zip 或源码目录。
 
-## 文件说明
+## 安全提醒
 
-- `yandex_wordstat_mvp.py`：主程序。
-- `run_windows.bat`：Windows 双击运行入口。
-- `seeds_lifestyle_ru.txt`：俄罗斯生活习俗默认种子词。
-- `seeds_product_ru.txt`：产品类目种子词示例。
-- `seeds_context_ru.txt`：节日/天气/场景种子词示例。
-- `seed_bank_ru_cn.csv`：种子词类型、用途、预期结果说明。
-- `README_使用说明.txt`：中文使用说明。
+不要提交以下内容：
 
-## 种子词建议
+- API Key；
+- `api_settings.json` 中带真实密钥的版本；
+- WB 原始业务数据；
+- 工具运行生成的 `results/`、`input/`、`category_cache/` 等本地缓存；
+- 含客户、订单、广告后台隐私信息的文件。
 
-| 类型 | 示例 | 预期得到 |
-|---|---|---|
-| 产品类目词 | `сумка`、`рюкзак`、`чехол для телефона` | 颜色、材质、款式、尺寸、人群、购买意图 |
-| 节日词 | `новый год`、`8 марта`、`день рождения` | 节日、礼物、祝福、家庭活动 |
-| 天气季节词 | `погода`、`мороз`、`снег`、`жара` | 季节性需求、保暖、防水、户外 |
-| 场景词 | `дача`、`школа`、`в машину`、`для кухни` | dacha、学校、车用、厨房、旅行等生活场景 |
+## 当前说明
+
+最新 WB 选品工具版本为 **v0.5.1**。由于当前连接器写入 GitHub 时只稳定支持文本文件，二进制 zip 包建议通过本地 Git / GitHub 网页 Release 上传；本仓库已先建立长期维护结构、版本说明和上传规范。

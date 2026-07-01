@@ -1,0 +1,19 @@
+{
+  "api_base_url": "https://api.deepseek.com",
+  "model": "deepseek-chat",
+  "api_key": "",
+  "profile": "standard",
+  "auto_supplement": true,
+  "save_api_key": true,
+  "temperature": 0,
+  "max_output_tokens": 16000,
+  "prices": {
+    "input_per_million": 0,
+    "cache_hit_per_million": 0,
+    "output_per_million": 0,
+    "currency": "CNY"
+  },
+  "fallback_model": "deepseek-chat",
+  "response_format": "json_object",
+  "timeout_seconds": 240
+}
